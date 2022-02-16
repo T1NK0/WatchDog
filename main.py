@@ -1,11 +1,12 @@
 import sched
 import time
 
+from matplotlib import pyplot as plt
+import matplotlib.animation as animation
 from pysnmp import hlapi
 
 import commonTools
 import getters
-import interface
 from interface import Interface
 
 # Sets our target device (our switch in this case).
@@ -33,26 +34,43 @@ bytes_out_r1 = []
 
 s = sched.scheduler(time.time, time.sleep)
 
+fig = plt.figure()
+ax1 = fig.add_subplot(1, 1, 1)
 
-def calculate_throughput(sc):
+
+def animate(i):
     bytes_in_r1.append(interface_information(get_in_octs))
+    bytes_out_r1.append(interface_information(get_out_octs))
+
     if len(bytes_in_r1) == 2:
         throughput_bits_per_second = ((bytes_in_r1[1] - bytes_in_r1[0]) * 8) / 5
         print(str(throughput_bits_per_second) + " bps input")
         bytes_in_r1[0] = bytes_in_r1[1]
         bytes_in_r1.pop(1)
-        pi1.in_oct.append(throughput_bits_per_second)
+        pi1.in_oct.append(int(throughput_bits_per_second))
 
-    bytes_out_r1.append(interface_information(get_out_octs))
+        if len(pi1.x_pos) == 0:
+            pi1.x_pos.append(0)
+        else:
+            temp_value = pi1.x_pos[-1] + 5
+            pi1.x_pos.append(temp_value)
+
     if len(bytes_out_r1) == 2:
         throughput_bits_per_second = ((bytes_out_r1[1] - bytes_out_r1[0]) * 8) / 5
         print(str(throughput_bits_per_second) + " bps output")
         bytes_out_r1[0] = bytes_out_r1[1]
         bytes_out_r1.pop(1)
-        pi1.out_oct.append(throughput_bits_per_second)
+        pi1.out_oct.append(int(throughput_bits_per_second))
 
-    s.enter(5, 1, calculate_throughput, (sc,))
+    xar = []
+    yar = []
+    for index, cordinate in enumerate(pi1.x_pos):
+        if len(pi1.x_pos) > 1:
+            xar.append(int(pi1.x_pos[index]))
+            yar.append(int(pi1.in_oct[index]))
+    ax1.clear()
+    ax1.plot(xar, yar)
 
 
-s.enter(5, 1, calculate_throughput, (s,))
-s.run()
+ani = animation.FuncAnimation(fig, animate, interval=5000)
+plt.show()

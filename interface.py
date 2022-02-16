@@ -3,3 +3,4 @@ class Interface:
         self.port_name = port_name
         self.in_oct = []
         self.out_oct = []
+        self.x_pos = []
