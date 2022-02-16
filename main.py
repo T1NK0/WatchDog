@@ -69,7 +69,7 @@ def animate(i):
             xar.append(int(pi1.x_pos[index]))
             yar.append(int(pi1.in_oct[index]))
     ax1.clear()
-    ax1.plot(xar, yar)
+    ax1.plot(xar, yar, linestyle="-", marker=".")
 
 
 ani = animation.FuncAnimation(fig, animate, interval=5000)
