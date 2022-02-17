@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from pysnmp import hlapi
 import commonTools
 import getters
+import logger
 from interface import Interface
 
 # Sets our target device (our switch in this case).
@@ -76,17 +77,18 @@ def animate(i):
             yar_out.append(int(pi1.out_oct[index]))
 
     ax1.clear()
-    ax1.plot(xar_in, yar_in, linestyle="-", marker=".", color="green")
-    ax1.plot(xar_out, yar_out, linestyle="-", marker=".", color="blue")
+    ax1.plot(xar_in, yar_in, linestyle="-", color="blue")
+    ax1.plot(xar_out, yar_out, linestyle="-", color="orange")
 
-    input_label = patches.Patch(color="green", label="Input")
-    output_label = patches.Patch(color="blue", label="Output")
+    input_label = patches.Patch(color="blue", label="Input")
+    output_label = patches.Patch(color="orange", label="Output")
     plt.legend(handles=[input_label, output_label])
 
     plt.suptitle("Throughput Graphs")
     plt.xlabel("Seconds")
     plt.ylabel("Throughput")
 
+    logger.log(bytes_in_r1[0], bytes_out_r1[0])
 
 ani = animation.FuncAnimation(fig, animate, interval=5000)
 plt.show()
