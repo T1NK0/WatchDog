@@ -8,5 +8,5 @@ def log(input, output):
     filename = "%s.txt" % time
     # appends to the file due to the "a".
     f = open(filename, "a")
-    f.write(current_time.strftime("%m%d&Y %H:%M:%S#") + " input: " + str(input) + " output: " + str(output) + "\r")
+    f.write(current_time.strftime("%m/%d/%Y %H:%M:%S#") + " input: " + str(input) + " output: " + str(output) + "\r")
     f.close()
