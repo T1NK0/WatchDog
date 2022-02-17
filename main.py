@@ -1,10 +1,9 @@
 import sched
 import time
-
-from matplotlib import pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.patches as patches
+from matplotlib import pyplot as plt
 from pysnmp import hlapi
-
 import commonTools
 import getters
 from interface import Interface
@@ -62,14 +61,31 @@ def animate(i):
         bytes_out_r1.pop(1)
         pi1.out_oct.append(int(throughput_bits_per_second))
 
-    xar = []
-    yar = []
+    xar_in = []
+    yar_in = []
     for index, cordinate in enumerate(pi1.x_pos):
         if len(pi1.x_pos) > 1:
-            xar.append(int(pi1.x_pos[index]))
-            yar.append(int(pi1.in_oct[index]))
+            xar_in.append(int(pi1.x_pos[index]))
+            yar_in.append(int(pi1.in_oct[index]))
+
+    xar_out = []
+    yar_out = []
+    for index, cordinate in enumerate(pi1.x_pos):
+        if len(pi1.x_pos) > 1:
+            xar_out.append(int(pi1.x_pos[index]))
+            yar_out.append(int(pi1.out_oct[index]))
+
     ax1.clear()
-    ax1.plot(xar, yar, linestyle="-", marker=".")
+    ax1.plot(xar_in, yar_in, linestyle="-", marker=".", color="green")
+    ax1.plot(xar_out, yar_out, linestyle="-", marker=".", color="blue")
+
+    input_label = patches.Patch(color="green", label="Input")
+    output_label = patches.Patch(color="blue", label="Output")
+    plt.legend(handles=[input_label, output_label])
+
+    plt.suptitle("Throughput Graphs")
+    plt.xlabel("Seconds")
+    plt.ylabel("Throughput")
 
 
 ani = animation.FuncAnimation(fig, animate, interval=5000)
