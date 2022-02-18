@@ -1,3 +1,4 @@
+import datetime
 import sched
 import time
 import matplotlib.animation as animation
@@ -7,6 +8,8 @@ from pysnmp import hlapi
 import commonTools
 import getters
 import logger
+import trapHandler
+# import tkinter as tk
 from interface import Interface
 
 # Sets our target device (our switch in this case).
@@ -20,6 +23,13 @@ get_out_octs = "1.3.6.1.2.1.2.2.1.16.3"
 # Sets our credentials to the community we created on the switch.
 credentials = hlapi.CommunityData('ciscolab')
 
+window = tk.Tk()
+motd = tk.Label(
+    text="Hello, user!"
+)
+motd.pack()
+
+# trapHandler.trapHandler()
 
 def interface_information(mib_code):
     get_info = getters.get(target, [mib_code], credentials)
@@ -89,6 +99,7 @@ def animate(i):
     plt.ylabel("Throughput")
 
     logger.log(bytes_in_r1[0], bytes_out_r1[0])
+
 
 ani = animation.FuncAnimation(fig, animate, interval=5000)
 plt.show()
