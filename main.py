@@ -9,7 +9,7 @@ import commonTools
 import getters
 import logger
 import trapHandler
-# import tkinter as tk
+import tkinter as tk
 from interface import Interface
 
 # Sets our target device (our switch in this case).
@@ -23,11 +23,6 @@ get_out_octs = "1.3.6.1.2.1.2.2.1.16.3"
 # Sets our credentials to the community we created on the switch.
 credentials = hlapi.CommunityData('ciscolab')
 
-# window = tk.Tk()
-# motd = tk.Label(
-#     text="Hello, user!"
-# )
-# motd.pack()
 
 # trapHandler.trapHandler()
 
@@ -38,6 +33,13 @@ def interface_information(mib_code):
 
 
 pi1 = Interface(interface_information(get_port_name))
+
+window = tk.Tk()
+motd = tk.Label(
+    text="You will be listening on port: " + pi1.port_name
+)
+motd.pack()
+
 print("Measuring on interface " + pi1.port_name)
 bytes_in_r1 = []
 bytes_out_r1 = []
@@ -55,6 +57,11 @@ def animate(i):
     if len(bytes_in_r1) == 2:
         throughput_bits_per_second = ((bytes_in_r1[1] - bytes_in_r1[0]) * 8) / 5
         print(str(throughput_bits_per_second) + " bps input")
+        throughputIn = tk.Label(
+            text=throughput_bits_per_second,
+            foreground="blue"
+        )
+        throughputIn.pack()
         bytes_in_r1[0] = bytes_in_r1[1]
         bytes_in_r1.pop(1)
         pi1.in_oct.append(int(throughput_bits_per_second))
@@ -68,6 +75,11 @@ def animate(i):
     if len(bytes_out_r1) == 2:
         throughput_bits_per_second = ((bytes_out_r1[1] - bytes_out_r1[0]) * 8) / 5
         print(str(throughput_bits_per_second) + " bps output")
+        throughputOut = tk.Label(
+            text=throughput_bits_per_second,
+            foreground="orange"
+        )
+        throughputOut.pack()
         bytes_out_r1[0] = bytes_out_r1[1]
         bytes_out_r1.pop(1)
         pi1.out_oct.append(int(throughput_bits_per_second))
