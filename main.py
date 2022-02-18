@@ -23,11 +23,11 @@ get_out_octs = "1.3.6.1.2.1.2.2.1.16.3"
 # Sets our credentials to the community we created on the switch.
 credentials = hlapi.CommunityData('ciscolab')
 
-window = tk.Tk()
-motd = tk.Label(
-    text="Hello, user!"
-)
-motd.pack()
+# window = tk.Tk()
+# motd = tk.Label(
+#     text="Hello, user!"
+# )
+# motd.pack()
 
 # trapHandler.trapHandler()
 
